@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download History</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .back-to-index-btn {
+            margin-bottom: 20px;
+        }
+
+        .pagination {
+            justify-content: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">ContentIQ</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <!-- <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li> -->
+                {% if not session.loggedin %}
+                <!-- Show login and register buttons when not logged in -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/register">Register</a>
+                </li>
+                {% else %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        {{ session.get('name', 'User') }} <!-- Display the user's name -->
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="/history">History</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/logout">Logout</a>
+                    </div>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Content with two columns -->
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Column for the "Back to Index" button -->
+            <div class="back-to-index-btn">
+                <a href="/index" class="btn btn-primary" style="margin: 15px; background-color: #06325d;">Back to
+                    Search</a>
+            </div>
+        </div>
+        <!-- Column for the history table -->
+        <div class="col">
+            <div class="history-table" style="color: white;">
+                <h1>Download History</h1>
+                <!-- Add history table here -->
+                <br>
+                <table class="table" style="color: white;">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Downloaded Content</th>
+                            <th>Action</th>
+                            <!-- Add more table headers as needed -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in history %}
+                        <tr>
+                            <td>{{ item.date }}</td>
+                            <td>{{ item.url }}</td>
+                            <td>
+                                <button class="btn btn-primary scrape-button" data-url="{{ item.url }}"
+                                    style="background-color: #06325d;">Scrape</button>
+                            </td>
+                            <!-- Add more table cells with data as needed -->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="row" style="background-color: #06325d;">
+            <div class="col" >
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if pagination.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('history', page=pagination.prev_num) }}">Previous</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link" style="background-color: #06325d;color: white;">Previous</span>
+                        </li>
+                        {% endif %}
+
+                        {% for page_num in pagination.iter_pages %}
+                        {% if page_num %}
+                        {% if page_num != pagination.page %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('history', page=page_num) }}">{{ page_num }}</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item active">
+                            <span class="page-link" style="background-color: #06325d; ">{{ page_num }}</span>
+                        </li>
+                        {% endif %}
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link" style="background-color: #06325d;">...</span>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if pagination.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('history', page=pagination.next_num) }}">Next</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link" style="background-color: #06325d;">Next</span>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Bootstrap JS, Popper.js, and jQuery -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.0/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('.scrape-button').forEach(button => {
+                    button.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        scrapeData(this.getAttribute('data-url'));
+                    });
+                });
+            });
+
+            function scrapeData(url) {
+                fetch('/scrape', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `url=${encodeURIComponent(url)}`
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            alert(data.message); // Show success message
+                        } else {
+                            alert(data.error); // Show error message
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        </script>
+
+</body>
+
+</html>

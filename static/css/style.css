@@ -1,0 +1,67 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    margin: 0;
+    height: 100vh;
+    background-color: #06325d; /* Dark blue background */
+  }
+  
+  .main-content {
+    flex-grow: 1;
+    padding: 20px;
+  }
+  
+  .form-section {
+    background-color: #002244; /* Dark blue background */
+    color: #f7f7f7;
+    padding: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .form-section label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .form-section input[type="text"],
+  .form-section input[type="number"],
+  .form-section select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: #002244; /* Dark blue background */
+    color: #f7f7f7;
+
+  }
+  
+  .search-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .search-button:hover {
+    background-color: #45a049;
+  }
+  
+  .results-section {
+    color: #f7f7f7;
+    padding: 20px;
+  }
+  
+  .navbar{
+    background-color: #002244; /* Dark blue background */
+  }
+  /* Style for the "Back to Index" button */
+.back-to-index-btn {
+  margin-bottom: 20px; /* Add space between button and table */
+}
+
+/* Style for the history table */
+.history-table {
+  margin-top: 20px; /* Add space between button and table */
+}

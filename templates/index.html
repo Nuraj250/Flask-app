@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContentIQ</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Your Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="height: 150vh;">
+        <a class="navbar-brand" href="#">ContentIQ</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+
+                {% if not session.loggedin %}
+                <!-- Show login and register buttons when not logged in -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/register">Register</a>
+                </li>
+                {% else %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        {{ session.get('name', 'User') }} <!-- Display the user's name -->
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown" style="background-color: #06325d;">
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#profileModal"
+                            style="color: white;">Profile</a>
+                        <a class="dropdown-item" href="/history" style="color: white;">History</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/logout" style="color: white;">Logout</a>
+                    </div>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <div class="form-section">
+            <form id="searchForm" action="/search" method="post" class="mb-3">
+                <div class="form-group">
+                    <label for="type">Type</label>
+                    <select id="type" name="type" class="form-control">
+                        <option value="">Search</option>
+                        <option>Images</option>
+                        <option>Videos</option>
+                        <option>Places</option>
+                        <option>News</option>
+                        <option>Shopping</option>
+                        <!-- Add more type options here -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="query">Query</label>
+                    <input type="text" id="query" name="query" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="page">Page</label>
+                    <input type="number" id="page" name="page" class="form-control" value="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="results">Number of results</label>
+                    <input type="number" id="results" name="results" class="form-control" value="10" required>
+                </div>
+
+                <button type="clcik" id="searchButton" class="btn btn-primary" style="background-color: #06325d;">Search</button>
+            </form>
+        </div>
+
+        <div class="results-section">
+            {% if results %}
+            <table class="table" style="color: white;">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Link</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in results %}
+                    <tr>
+                        <td>{{ result.title }}</td>
+                        <td>{{ result.link }}</td>
+                        <td>
+                            <button type="button" class="btn btn-secondary scrape-button"
+                                data-url="{{ result.link }}">Scrape</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No results found.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Bootstrap Modal -->
+    <div class="modal fade" id="scrapeModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Scraped Data</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="scrapedData">Loading...</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a href="#" id="downloadLink" class="btn btn-primary" download>Download</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="profileModalLabel">User Profile</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Profile details -->
+                    <div class="form-group">
+                        <label for="profileName"> Name : {{ session.get('name', 'User') }} </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="profileEmail">Email : {{ session.get('email', 'Emali') }} </label>
+                    </div>
+                    <!-- Add more profile details fields as needed -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchForm = document.getElementById('searchForm');
+            const searchButton = document.getElementById('searchButton');
+            const inputs = searchForm.querySelectorAll('input, select');
+
+            function updateButtonState() {
+                let allFilled = Array.from(inputs).every(input => {
+                    if (input.type === 'text' || input.type === 'number') {
+                        return input.value.trim() !== '';
+                    }
+                    return input.value !== '';
+                });
+
+                // searchButton.disabled = !allFilled;
+            }
+
+            updateButtonState(); // Initial check
+
+            document.querySelectorAll('.scrape-button').forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    scrapeData(this.getAttribute('data-url'));
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            // Fetch user details and populate profile modal fields
+            $.ajax({
+                url: '/profile',
+                type: 'GET',
+                success: function (data) {
+                    $('#profileName').val(data.name);
+                    $('#profileEmail').val(data.email);
+                    // Add more fields as needed
+                },
+                error: function (error) {
+                    console.error('Error fetching user profile:', error);
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.scrape-button').forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    scrapeData(this.getAttribute('data-url'));
+                });
+            });
+        });
+
+        function scrapeData(url) {
+            fetch('/scrape', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `url=${encodeURIComponent(url)}`
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        alert(data.message); // Show success message
+                    } else {
+                        alert(data.error); // Show error message
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+
+</html>
