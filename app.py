@@ -105,7 +105,7 @@ def search():
     # Select the API endpoint based on the search type
     api_endpoint = url_mapping.get(search_type, url_mapping['search'])
     headers = {
-        'X-API-KEY': 'your_api_key_here',
+        'X-API-KEY': '3878fdaf12217c8208c5c9dd5a161734975e12f2',
         'Content-Type': 'application/json'
     }
 
