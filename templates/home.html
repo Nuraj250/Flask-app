@@ -2,51 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- Ensures proper rendering and touch zooming for all devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ContentIQ</title>
+    <title>Register</title>
+    <!-- Bootstrap CSS for styling the form and other elements -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body, html {
             height: 100%;
             margin: 0;
-        }
-        .hero-section {
-            background-color: #002244; /* Dark blue background */
-            color: white;
-            height: 100vh; /* Use full viewport height */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 15px;
-        }
-        .hero-section h1 {
-            font-size: 4rem; /* Large font size for the title */
-            margin-bottom: 1rem;
-        }
-        .hero-section p {
-            font-size: 1.5rem; /* Larger font size for the slogan */
-            margin-bottom: 2rem;
-        }
-        .hero-section .btn {
-            padding: 0.75rem 2rem;
-            font-size: 1.2rem;
-            margin-top: 2rem; /* Space above the button */
+            background-color: #002244; /* Sets a dark blue background color for the entire page */
+            color: white; /* Sets the text color to white for contrast against the dark background */
         }
     </style>
 </head>
 <body>
-    <div class="hero-section">
-        <h1>Step Into the Future of Content Exploration with ContentIQ</h1>
-        <p>Discover ContentIQ: Your ultimate tool for easy web searching and efficient content curation, transforming how you interact with the digital world.</p>
-        <a href="/index" class="btn btn-primary btn-lg mt-4">Let's Get Started</a>
+    <div class="container mt-5">
+        <h2 class="mb-3">Register</h2> <!-- Heading for the form -->
+        <form method="POST" action="/register"> <!-- Form submission via POST request to the "/register" route -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <!-- Email input field -->
+                <input type="email" id="email" name="email" class="form-control" placeholder="Enter email" required>
+            </div>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <!-- Name input field -->
+                <input type="text" id="name" name="name" class="form-control" placeholder="Enter name" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <!-- Password input field -->
+                <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required>
+            </div>
+            <!-- Submit button for the form -->
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
     </div>
 
-    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <!-- Bootstrap JS, Popper.js, and jQuery for interactive elements -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.0/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-

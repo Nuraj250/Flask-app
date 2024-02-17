@@ -2,40 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- Ensures the website is mobile-friendly by setting the viewport width to the device's width -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <!-- Bootstrap CSS -->
+    <!-- Link to the Bootstrap CSS for easy styling -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body, html {
             height: 100%;
             margin: 0;
-            background-color: #002244; /* Dark blue background */
-            color: white;
+            background-color: #002244; /* Sets a dark blue background for the entire page */
+            color: white; /* Changes the text color to white for contrast */
         }
     </style>
 </head>
 <body>
     <div class="container mt-5">
-        <h2 class="mb-3">Login</h2>
-        <form method="POST" action="/login">
+        <h2 class="mb-3">Login</h2> <!-- The page title indicating the action to be taken -->
+        <form method="POST" action="/login"> <!-- The form that will be submitted to the server -->
             <div class="form-group">
                 <label for="email">Email</label>
+                <!-- Input for the user's email -->
                 <input type="email" id="email" name="email" class="form-control" placeholder="Enter email" required>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
+                <!-- Input for the user's password -->
                 <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required>
             </div>
-            <button type="submit" class="btn btn-primary">Login</button>
+            <button type="submit" class="btn btn-primary">Login</button> <!-- Button to submit the form -->
         </form>
 
+        <!-- Link to the registration page for users who don't have an account yet -->
         <div class="mt-4">
             <p>Don't have an account? <a href="/register" class="btn btn-secondary">Go to Register Page</a></p>
         </div>
     </div>
 
-    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <!-- Scripts for Bootstrap functionality -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
