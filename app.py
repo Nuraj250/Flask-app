@@ -15,7 +15,7 @@ app = Flask(__name__)
 app.secret_key = '1998'
 
 # Get the MongoDB URI from environment variables for security reasons
-mongo_uri = os.environ.get('MONGO_URI', 'your_mongodb_uri_here')
+mongo_uri = os.environ.get('MONGO_URI', 'mongodb+srv://nuraj200:QXr6P007i2qFOXwx@cluster0.gsgezdw.mongodb.net/?retryWrites=true&w=majority')
 client = MongoClient(mongo_uri)
 
 # Define the home page route
